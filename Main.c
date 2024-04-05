@@ -29,7 +29,6 @@ int main()
   UART1_DefInit();
   UART1_BaudRateCfg(9600);
 
-  write_serial("\n\rHello");
   printf("\n\rHello from printf");
 
 	while(1)
@@ -41,9 +40,4 @@ int main()
 		UART1_SendString("*",1);
 		GPIOB_ResetBits( GPIO_Pin_0 );
 	}
-}
-
-void general_Handler(void)
-{
-
 }
