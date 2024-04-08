@@ -19,17 +19,22 @@ void write_serial(char *str)
 int main()
 {       
 	SystemInit();
-	
+
 	/* PB0-LED */
 	GPIOB_ModeCfg(GPIO_Pin_0, GPIO_ModeOut_PP_20mA);
 	GPIOA_ModeCfg(GPIO_Pin_8, GPIO_ModeIN_PU);
-  GPIOA_ModeCfg(GPIO_Pin_9, GPIO_ModeOut_PP_5mA);
+	GPIOA_ModeCfg(GPIO_Pin_9, GPIO_ModeOut_PP_5mA);
 
 
-  UART1_DefInit();
-  UART1_BaudRateCfg(9600);
+	UART1_DefInit();
+	UART1_BaudRateCfg(115200);
 
-  printf("\n\rHello from printf");
+	printf("\n\rHello from printf");
+
+	GPIOA_SetBits(GPIO_Pin_10);
+	GPIOA_ModeCfg(GPIO_Pin_10, GPIO_ModeIN_Floating);
+	GPIOA_ITModeCfg( GPIO_Pin_10, GPIO_ITMode_FallEdge );
+    NVIC_EnableIRQ( GPIO_IRQn );
 
 	while(1)
 	{
@@ -40,4 +45,10 @@ int main()
 		UART1_SendString("*",1);
 		GPIOB_ResetBits( GPIO_Pin_0 );
 	}
+}
+
+void GPIO_IRQHandler(void)
+{
+    GPIOA_ClearITFlagBit( GPIO_Pin_10);
+	printf("\n\rPA10 falling edge");
 }
